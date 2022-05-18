@@ -19,14 +19,9 @@ public class UserController {
     }
 
     @GetMapping("users")
-    public ResponseEntity<User> getUserByUsername(@RequestParam("username") String username) {
-        User user = userService.getUserByUsername(username);
-
-        // this is probably really bad
-        if (user == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
-        }
+    @ResponseStatus(HttpStatus.OK)
+    public User getUserByUsername(@RequestParam("username") String username) {
+        // TODO: if user is not found, handle through @ControllerAdvice
+        return userService.getUserByUsername(username);
     }
 }
