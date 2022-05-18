@@ -21,4 +21,11 @@ public class UserService {
         return userRepository.findByAccessToken(accessToken);
     }
 
+    public User createUser(String username, String email, String accessToken) {
+        User newUser = new User(username, email, accessToken);
+
+        userRepository.save(newUser);
+
+        return newUser;
+    }
 }

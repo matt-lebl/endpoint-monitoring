@@ -19,6 +19,14 @@ public class User {
     @Column
     private String accessToken;
 
+    public User() {}
+
+    public User(String username, String email, String accessToken) {
+        this.username = username;
+        this.email = email;
+        this.accessToken = accessToken;
+    }
+
     public String getEmail() {
         return email;
     }
