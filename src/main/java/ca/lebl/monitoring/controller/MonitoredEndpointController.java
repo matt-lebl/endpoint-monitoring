@@ -4,10 +4,7 @@ import ca.lebl.monitoring.entity.MonitoredEndpoint;
 import ca.lebl.monitoring.entity.User;
 import ca.lebl.monitoring.service.MonitoredEndpointService;
 import ca.lebl.monitoring.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,6 +30,17 @@ public class MonitoredEndpointController {
         User user = userService.getUserByAccessToken(accessToken);
 
         return endpointService.listByOwner(user);
+    }
+
+    @PostMapping
+    public MonitoredEndpoint postMonitoredEndpoint(
+        @RequestParam("accessToken") String accessToken,
+        @RequestParam("url") String url,
+        @RequestParam("interval") Integer interval
+    ) {
+        User user = userService.getUserByAccessToken(accessToken);
+
+        return endpointService.createMonitoredEndpoint(user, url, interval);
     }
 
 }

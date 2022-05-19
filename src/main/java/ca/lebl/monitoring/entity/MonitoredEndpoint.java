@@ -26,6 +26,16 @@ public class MonitoredEndpoint {
     @Column
     private Integer interval;
 
+    public MonitoredEndpoint(User owner, String url, Integer interval) {
+        this.owner = owner;
+        this.url = url;
+        this.interval = interval;
+        this.created = Calendar.getInstance();
+        this.lastChecked = null;
+    }
+
+    public MonitoredEndpoint() {}
+
     public Long getId() {
         return id;
     }

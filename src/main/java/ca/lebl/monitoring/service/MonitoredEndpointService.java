@@ -19,4 +19,12 @@ public class MonitoredEndpointService {
     public List<MonitoredEndpoint> listByOwner(User user) {
         return endpointRepository.findByOwner(user);
     }
+
+    public MonitoredEndpoint createMonitoredEndpoint(User user, String url, Integer interval) {
+        MonitoredEndpoint endpoint = new MonitoredEndpoint(user, url, interval);
+
+        endpointRepository.save(endpoint);
+
+        return endpoint;
+    }
 }
