@@ -1,5 +1,6 @@
 package ca.lebl.monitoring.security;
 
+import ca.lebl.monitoring.service.UserService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,17 +12,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService detailsService;
+    private final UserService userService;
 
-    public SecurityConfig(UserDetailsService detailsService) {
-        this.detailsService = detailsService;
+    public SecurityConfig(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests().anyRequest().authenticated();
-        http.addFilterBefore(new AuthTokenFilter(detailsService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new AuthTokenFilter(userService), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

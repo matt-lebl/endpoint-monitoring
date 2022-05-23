@@ -1,5 +1,7 @@
 package ca.lebl.monitoring.security;
 
+import ca.lebl.monitoring.entity.User;
+import ca.lebl.monitoring.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -12,10 +14,10 @@ import java.io.IOException;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
 
-    private final UserDetailsService detailsService;
+    private final UserService userService;
 
-    public AuthTokenFilter(UserDetailsService detailsService) {
-        this.detailsService = detailsService;
+    public AuthTokenFilter(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -30,14 +32,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        UserDetails details = detailsService.loadUserByUsername(token);
+        User user = userService.getUserByAccessToken(token);
 
-        if (details == null) {
+        if (user == null) {
             return;
         }
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-            details,
+            user,
             null,
             null
         );
