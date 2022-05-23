@@ -2,7 +2,9 @@ package ca.lebl.monitoring.service;
 
 import ca.lebl.monitoring.entity.MonitoredEndpoint;
 import ca.lebl.monitoring.entity.User;
+import ca.lebl.monitoring.exception.EndpointNotFoundException;
 import ca.lebl.monitoring.repository.MonitoredEndpointRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,5 +28,16 @@ public class MonitoredEndpointService {
         endpointRepository.save(endpoint);
 
         return endpoint;
+    }
+
+    public MonitoredEndpoint getEndpointById(Long endpointId) {
+        User loggedInUser = getUser();
+        MonitoredEndpoint endpoint = endpointRepository.findByIdAndOwner(endpointId, loggedInUser).orElseThrow(EndpointNotFoundException::new);
+
+        return endpoint;
+    }
+
+    private User getUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

@@ -8,6 +8,6 @@ import java.util.stream.Stream;
 
 public interface MonitoringResultRepository extends JpaRepository<MonitoringResult, Long> {
 
-    Stream<MonitoringResult> findByMonitoredEndpointOrderByDateOfCheck(MonitoredEndpoint endpoint);
+    Stream<MonitoringResult> findByEndpointOrderByDateOfCheck(MonitoredEndpoint endpoint);
 
 }

@@ -18,7 +18,7 @@ public class MonitoringResultService {
 
     public List<MonitoringResult> getTenLatestResultsForEndpoint(MonitoredEndpoint endpoint) {
 
-        return resultRepository.findByMonitoredEndpointOrderByDateOfCheck(endpoint).limit(10).toList();
+        return resultRepository.findByEndpointOrderByDateOfCheck(endpoint).limit(10).toList();
 
     }
 
