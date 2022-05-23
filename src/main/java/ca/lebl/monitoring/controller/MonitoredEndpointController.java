@@ -4,6 +4,7 @@ import ca.lebl.monitoring.entity.MonitoredEndpoint;
 import ca.lebl.monitoring.entity.User;
 import ca.lebl.monitoring.service.MonitoredEndpointService;
 import ca.lebl.monitoring.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,23 +25,24 @@ public class MonitoredEndpointController {
     }
 
     @GetMapping
-    public List<MonitoredEndpoint> getMonitoredEndpointsForUser(
-        @RequestParam("accessToken") String accessToken
-    ) {
-        User user = userService.getUserByAccessToken(accessToken);
+    public List<MonitoredEndpoint> getMonitoredEndpointsForUser() {
+        User user = getUser();
 
         return endpointService.listByOwner(user);
     }
 
     @PostMapping
     public MonitoredEndpoint postMonitoredEndpoint(
-        @RequestParam("accessToken") String accessToken,
         @RequestParam("url") String url,
         @RequestParam("interval") Integer interval
     ) {
-        User user = userService.getUserByAccessToken(accessToken);
+        User user = getUser();
 
         return endpointService.createMonitoredEndpoint(user, url, interval);
+    }
+
+    private User getUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }
