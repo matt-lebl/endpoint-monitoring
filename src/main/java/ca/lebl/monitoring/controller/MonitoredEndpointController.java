@@ -1,5 +1,6 @@
 package ca.lebl.monitoring.controller;
 
+import ca.lebl.monitoring.dto.MonitoredEndpointDto;
 import ca.lebl.monitoring.entity.MonitoredEndpoint;
 import ca.lebl.monitoring.entity.User;
 import ca.lebl.monitoring.service.MonitoredEndpointService;
@@ -21,20 +22,20 @@ public class MonitoredEndpointController {
     }
 
     @GetMapping
-    public List<MonitoredEndpoint> getMonitoredEndpointsForUser() {
+    public List<MonitoredEndpointDto> getMonitoredEndpointsForUser() {
         User user = getUser();
 
-        return endpointService.listByOwner(user);
+        return endpointService.listByOwner(user).stream().map(MonitoredEndpoint::toDto).toList();
     }
 
     @PostMapping
-    public MonitoredEndpoint postMonitoredEndpoint(
+    public MonitoredEndpointDto postMonitoredEndpoint(
         @RequestParam("url") String url,
         @RequestParam("interval") Integer interval
     ) {
         User user = getUser();
 
-        return endpointService.createMonitoredEndpoint(user, url, interval);
+        return endpointService.createMonitoredEndpoint(user, url, interval).toDto();
     }
 
     private User getUser() {
