@@ -1,5 +1,7 @@
 package ca.lebl.monitoring.entity;
 
+import ca.lebl.monitoring.dto.MonitoredEndpointDto;
+
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
@@ -83,5 +85,14 @@ public class MonitoredEndpoint {
 
     public void setInterval(Integer interval) {
         this.interval = interval;
+    }
+
+    public MonitoredEndpointDto toDto() {
+        return new MonitoredEndpointDto(
+            id,
+            url,
+            lastChecked,
+            created
+        );
     }
 }
