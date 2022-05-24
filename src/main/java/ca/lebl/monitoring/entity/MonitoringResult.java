@@ -1,6 +1,7 @@
 package ca.lebl.monitoring.entity;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 
 @Entity
@@ -12,7 +13,7 @@ public class MonitoringResult {
     private Long id;
 
     @Column
-    private Calendar dateOfCheck;
+    private ZonedDateTime dateOfCheck;
 
     @Column
     private String payload;
@@ -31,11 +32,11 @@ public class MonitoringResult {
         this.id = id;
     }
 
-    public Calendar getDateOfCheck() {
+    public ZonedDateTime getDateOfCheck() {
         return dateOfCheck;
     }
 
-    public void setDateOfCheck(Calendar dateOfCheck) {
+    public void setDateOfCheck(ZonedDateTime dateOfCheck) {
         this.dateOfCheck = dateOfCheck;
     }
 
