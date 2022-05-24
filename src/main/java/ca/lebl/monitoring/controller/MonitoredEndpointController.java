@@ -3,7 +3,6 @@ package ca.lebl.monitoring.controller;
 import ca.lebl.monitoring.entity.MonitoredEndpoint;
 import ca.lebl.monitoring.entity.User;
 import ca.lebl.monitoring.service.MonitoredEndpointService;
-import ca.lebl.monitoring.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +13,11 @@ import java.util.List;
 public class MonitoredEndpointController {
 
     private final MonitoredEndpointService endpointService;
-    private final UserService userService;
 
     public MonitoredEndpointController(
-        MonitoredEndpointService endpointService,
-        UserService userService
+        MonitoredEndpointService endpointService
     ) {
         this.endpointService = endpointService;
-        this.userService = userService;
     }
 
     @GetMapping
