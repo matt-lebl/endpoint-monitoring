@@ -1,6 +1,7 @@
 package ca.lebl.monitoring.entity;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 
 @Entity
@@ -15,10 +16,10 @@ public class MonitoredEndpoint {
     private String url;
 
     @Column
-    private Calendar created;
+    private ZonedDateTime created;
 
     @Column
-    private Calendar lastChecked;
+    private ZonedDateTime lastChecked;
 
     @ManyToOne
     private User owner;
@@ -30,7 +31,7 @@ public class MonitoredEndpoint {
         this.owner = owner;
         this.url = url;
         this.interval = interval;
-        this.created = Calendar.getInstance();
+        this.created = ZonedDateTime.now();
         this.lastChecked = null;
     }
 
@@ -52,19 +53,19 @@ public class MonitoredEndpoint {
         this.url = url;
     }
 
-    public Calendar getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(Calendar created) {
+    public void setCreated(ZonedDateTime created) {
         this.created = created;
     }
 
-    public Calendar getLastChecked() {
+    public ZonedDateTime getLastChecked() {
         return lastChecked;
     }
 
-    public void setLastChecked(Calendar lastChecked) {
+    public void setLastChecked(ZonedDateTime lastChecked) {
         this.lastChecked = lastChecked;
     }
 
