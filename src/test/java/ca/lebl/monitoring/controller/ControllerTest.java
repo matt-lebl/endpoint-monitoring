@@ -13,13 +13,14 @@ public abstract class ControllerTest {
     private UserService userService;
 
     // arbitrary values used for mocking
-    private final String AUTHORIZED_ACCESS_TOKEN = "someAuthorizedToken";
-    private final String UNAUTHORIZED_ACCESS_TOKEN = "someUnauthorizedToken";
+    final String AUTHORIZED_ACCESS_TOKEN = "someAuthorizedToken";
+    final String UNAUTHORIZED_ACCESS_TOKEN = "someUnauthorizedToken";
+    final User AUTHORIZED_USER = new User("Testuser", "test.user@applifting.cz", AUTHORIZED_ACCESS_TOKEN);
 
     @BeforeEach
     void setUp() {
         Mockito.when(userService.getUserByAccessToken(AUTHORIZED_ACCESS_TOKEN))
-            .thenReturn(new User("Testuser", "test.user@applifting.cz", AUTHORIZED_ACCESS_TOKEN));
+            .thenReturn(AUTHORIZED_USER);
     }
 
     MockHttpServletRequestBuilder addAuthorizedToken(MockHttpServletRequestBuilder builder) {
