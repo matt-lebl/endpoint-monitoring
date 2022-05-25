@@ -2,10 +2,13 @@ package ca.lebl.monitoring.controller.request;
 
 import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.Positive;
+
 public class NewMonitoredEndpointRequest {
 
     @URL
     private String url;
+    @Positive
     private Integer interval;
 
     public NewMonitoredEndpointRequest(String url, Integer interval) {

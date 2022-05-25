@@ -102,6 +102,18 @@ public class MonitoredEndpointControllerTests extends ControllerTest {
             .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void testCreateInvalidInterval() throws Exception {
+        String url = "http://www.google.com/";
+        Integer interval = -4;
+
+        MockHttpServletRequestBuilder request = composeEndpointPostRequest(url, interval);
+        addAuthorizedToken(request);
+
+        mockMvc.perform(request)
+            .andExpect(status().isBadRequest());
+    }
+
     private MockHttpServletRequestBuilder composeEndpointPostRequest(String url, Integer interval) throws Exception {
         return post("/endpoints")
             .contentType(MediaType.APPLICATION_JSON)
