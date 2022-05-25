@@ -1,0 +1,33 @@
+package ca.lebl.monitoring.controller;
+
+import ca.lebl.monitoring.entity.User;
+import ca.lebl.monitoring.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+
+public abstract class ControllerTest {
+
+    @MockBean
+    private UserService userService;
+
+    // arbitrary values used for mocking
+    private final String AUTHORIZED_ACCESS_TOKEN = "someAuthorizedToken";
+    private final String UNAUTHORIZED_ACCESS_TOKEN = "someUnauthorizedToken";
+
+    @BeforeEach
+    void setUp() {
+        Mockito.when(userService.getUserByAccessToken(AUTHORIZED_ACCESS_TOKEN))
+            .thenReturn(new User("Testuser", "test.user@applifting.cz", AUTHORIZED_ACCESS_TOKEN));
+    }
+
+    MockHttpServletRequestBuilder addAuthorizedToken(MockHttpServletRequestBuilder builder) {
+        return builder.param("authToken", AUTHORIZED_ACCESS_TOKEN);
+    }
+
+    MockHttpServletRequestBuilder addUnauthorizedToken(MockHttpServletRequestBuilder builder) {
+        return builder.param("authToken", UNAUTHORIZED_ACCESS_TOKEN);
+    }
+
+}
