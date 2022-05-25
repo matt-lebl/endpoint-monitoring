@@ -78,9 +78,7 @@ public class MonitoredEndpointControllerTests extends ControllerTest {
         String url = "http://www.google.com/";
         Integer interval = 60;
 
-        MockHttpServletRequestBuilder request = post("/endpoints")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(newMonitoredEndpoint.write(new NewMonitoredEndpointRequest(url, interval)).getJson());
+        MockHttpServletRequestBuilder request = composeEndpointPostRequest(url, interval);
 
         addAuthorizedToken(request);
 
@@ -96,14 +94,18 @@ public class MonitoredEndpointControllerTests extends ControllerTest {
         String url = "badurl";
         Integer interval = 50;
 
-        MockHttpServletRequestBuilder request = post("/endpoints")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(newMonitoredEndpoint.write(new NewMonitoredEndpointRequest(url, interval)).getJson());
+        MockHttpServletRequestBuilder request = composeEndpointPostRequest(url, interval);
 
         addAuthorizedToken(request);
 
         mockMvc.perform(request)
             .andExpect(status().isBadRequest());
+    }
+
+    private MockHttpServletRequestBuilder composeEndpointPostRequest(String url, Integer interval) throws Exception {
+        return post("/endpoints")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newMonitoredEndpoint.write(new NewMonitoredEndpointRequest(url, interval)).getJson());
     }
 
 }
