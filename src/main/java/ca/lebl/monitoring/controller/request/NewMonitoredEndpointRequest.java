@@ -1,7 +1,10 @@
 package ca.lebl.monitoring.controller.request;
 
+import org.hibernate.validator.constraints.URL;
+
 public class NewMonitoredEndpointRequest {
 
+    @URL
     private String url;
     private Integer interval;
 

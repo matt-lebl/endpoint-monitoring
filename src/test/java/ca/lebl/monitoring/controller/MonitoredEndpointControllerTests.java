@@ -35,6 +35,15 @@ public class MonitoredEndpointControllerTests extends ControllerTest {
         JacksonTester.initFields(this, new ObjectMapper());
     }
 
+    @BeforeEach
+    void setupDummyMonitoredEndpoint() {
+        // createMonitoredEndpoint can return a dummy since we're not
+        // verifying the correctness of the data, just that the method
+        // was called.
+        when(endpointService.createMonitoredEndpoint(any(), any(), any()))
+            .thenReturn(mock(MonitoredEndpoint.class));
+    }
+
     @MockBean
     private MonitoredEndpointService endpointService;
 
@@ -73,12 +82,6 @@ public class MonitoredEndpointControllerTests extends ControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(newMonitoredEndpoint.write(new NewMonitoredEndpointRequest(url, interval)).getJson());
 
-        // createMonitoredEndpoint can return a dummy since we're not
-        // verifying the correctness of the data, just that the method
-        // was called.
-        when(endpointService.createMonitoredEndpoint(any(), any(), any()))
-            .thenReturn(mock(MonitoredEndpoint.class));
-
         addAuthorizedToken(request);
 
         mockMvc.perform(request)
@@ -86,6 +89,21 @@ public class MonitoredEndpointControllerTests extends ControllerTest {
 
         verify(endpointService, times(1))
             .createMonitoredEndpoint(AUTHORIZED_USER, url, interval);
+    }
+
+    @Test
+    void testCreateInvalidURL() throws Exception {
+        String url = "badurl";
+        Integer interval = 50;
+
+        MockHttpServletRequestBuilder request = post("/endpoints")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newMonitoredEndpoint.write(new NewMonitoredEndpointRequest(url, interval)).getJson());
+
+        addAuthorizedToken(request);
+
+        mockMvc.perform(request)
+            .andExpect(status().isBadRequest());
     }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         WebRequest request
     ) {
         return notFoundResponse();
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolation(
+        ConstraintViolationException e
+    ) {
+        // thank you https://medium.com/@aamine/customized-input-validation-in-spring-boot-1927aa440bc6
+        String exceptionResponse = String.format("Invalid input parameters: %s\n", e.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<Object> notFoundResponse() {
