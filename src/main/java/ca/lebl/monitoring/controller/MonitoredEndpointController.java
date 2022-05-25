@@ -1,5 +1,6 @@
 package ca.lebl.monitoring.controller;
 
+import ca.lebl.monitoring.controller.request.NewMonitoredEndpointRequest;
 import ca.lebl.monitoring.dto.MonitoredEndpointDto;
 import ca.lebl.monitoring.entity.MonitoredEndpoint;
 import ca.lebl.monitoring.entity.User;
@@ -30,12 +31,11 @@ public class MonitoredEndpointController {
 
     @PostMapping
     public MonitoredEndpointDto postMonitoredEndpoint(
-        @RequestParam("url") String url,
-        @RequestParam("interval") Integer interval
+        @RequestBody NewMonitoredEndpointRequest request
     ) {
         User user = getUser();
 
-        return endpointService.createMonitoredEndpoint(user, url, interval).toDto();
+        return endpointService.createMonitoredEndpoint(user, request.getUrl(), request.getInterval()).toDto();
     }
 
     private User getUser() {
