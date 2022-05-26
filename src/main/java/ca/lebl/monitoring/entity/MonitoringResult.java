@@ -4,7 +4,6 @@ import ca.lebl.monitoring.dto.MonitoringResultDto;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
 
 @Entity
 @Table(name = "monitoring_monitoringresult")
@@ -18,6 +17,7 @@ public class MonitoringResult {
     private ZonedDateTime dateOfCheck;
 
     @Column
+    @Lob
     private String payload;
 
     @Column
@@ -25,6 +25,15 @@ public class MonitoringResult {
 
     @ManyToOne
     private MonitoredEndpoint endpoint;
+
+    public MonitoringResult(ZonedDateTime dateOfCheck, String payload, Integer httpStatusCode, MonitoredEndpoint endpoint) {
+        this.dateOfCheck = dateOfCheck;
+        this.payload = payload;
+        this.httpStatusCode = httpStatusCode;
+        this.endpoint = endpoint;
+    }
+
+    public MonitoringResult() {}
 
     public Long getId() {
         return id;

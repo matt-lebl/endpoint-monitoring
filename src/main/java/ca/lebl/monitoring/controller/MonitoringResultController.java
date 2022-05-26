@@ -5,12 +5,14 @@ import ca.lebl.monitoring.entity.MonitoredEndpoint;
 import ca.lebl.monitoring.entity.MonitoringResult;
 import ca.lebl.monitoring.service.MonitoredEndpointService;
 import ca.lebl.monitoring.service.MonitoringResultService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("results")
@@ -25,11 +27,14 @@ public class MonitoringResultController {
     }
 
     @GetMapping
+    @Transactional(readOnly = true)
     public List<MonitoringResultDto> listLatestTenMonitoringResultsByEndpoint(
         @RequestParam("id") Long endpointId
     ) {
         MonitoredEndpoint endpoint = endpointService.getEndpointById(endpointId);
-        return resultService.getTenLatestResultsForEndpoint(endpoint).stream().map(MonitoringResult::toDto).toList();
+        try (Stream<MonitoringResult> resultStream = resultService.getTenLatestResultsForEndpoint(endpoint)) {
+            return resultStream.map(MonitoringResult::toDto).toList();
+        }
     }
 
 }

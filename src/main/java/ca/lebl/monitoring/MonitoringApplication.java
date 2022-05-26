@@ -1,12 +1,11 @@
 package ca.lebl.monitoring;
 
-import ca.lebl.monitoring.entity.User;
 import ca.lebl.monitoring.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.List;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @SpringBootApplication
 public class MonitoringApplication implements CommandLineRunner {
@@ -15,6 +14,14 @@ public class MonitoringApplication implements CommandLineRunner {
 
 	public MonitoringApplication(UserService userService) {
 		this.userService = userService;
+	}
+
+	@Bean
+	public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
+		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+		threadPoolTaskScheduler.setPoolSize(5);
+		threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
+		return threadPoolTaskScheduler;
 	}
 
 	public static void main(String[] args) {

@@ -4,7 +4,6 @@ import ca.lebl.monitoring.dto.MonitoredEndpointDto;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
 
 @Entity
 @Table(name = "monitoring_monitoredendpoint")

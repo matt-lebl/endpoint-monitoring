@@ -4,6 +4,7 @@ import ca.lebl.monitoring.entity.MonitoredEndpoint;
 import ca.lebl.monitoring.entity.User;
 import ca.lebl.monitoring.exception.EndpointNotFoundException;
 import ca.lebl.monitoring.repository.MonitoredEndpointRepository;
+import ca.lebl.monitoring.scheduled.MonitoringScheduler;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,11 @@ import java.util.List;
 public class MonitoredEndpointService {
 
     private final MonitoredEndpointRepository endpointRepository;
+    private final MonitoringScheduler scheduler;
 
-    public MonitoredEndpointService(MonitoredEndpointRepository endpointRepository) {
+    public MonitoredEndpointService(MonitoredEndpointRepository endpointRepository, MonitoringScheduler scheduler) {
         this.endpointRepository = endpointRepository;
+        this.scheduler = scheduler;
     }
 
     public List<MonitoredEndpoint> listByOwner(User user) {
@@ -26,6 +29,8 @@ public class MonitoredEndpointService {
         MonitoredEndpoint endpoint = new MonitoredEndpoint(user, url, interval);
 
         endpointRepository.save(endpoint);
+
+        scheduler.beginMonitoringEndpoint(endpoint);
 
         return endpoint;
     }
