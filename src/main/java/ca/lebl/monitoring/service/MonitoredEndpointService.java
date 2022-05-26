@@ -4,22 +4,17 @@ import ca.lebl.monitoring.entity.MonitoredEndpoint;
 import ca.lebl.monitoring.entity.User;
 import ca.lebl.monitoring.exception.EndpointNotFoundException;
 import ca.lebl.monitoring.repository.MonitoredEndpointRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
@@ -68,42 +63,15 @@ public class MonitoredEndpointService {
         List<MonitoredEndpoint> endpointsToCheck = getNextEndpointsToCheck();
 
         for (MonitoredEndpoint endpoint : endpointsToCheck) {
-            HttpURLConnection conn;
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.getForEntity(endpoint.getUrl(), String.class);
 
-            try {
-                URL url = new URL(endpoint.getUrl());
-                conn = (HttpURLConnection) url.openConnection();
-            } catch (Exception e) {
-                // what goes here?
-                return;
-            }
-
-            try {
-                Integer httpStatusCode = conn.getResponseCode();
-                Reader streamReader;
-
-                if (httpStatusCode > 299) {
-                    streamReader = new InputStreamReader(conn.getErrorStream());
-                } else {
-                    streamReader = new InputStreamReader(conn.getInputStream());
-                }
-
-                String payload = new BufferedReader(streamReader)
-                    .lines().collect(Collectors.joining("\n"));
-
-                resultService.recordResultForEndpoint(
-                    endpoint,
-                    ZonedDateTime.now(),
-                    httpStatusCode,
-                    payload
-                );
-
-                rescheduleEndpointCheck(endpoint);
-
-            } catch (IOException e) {
-                // what goes here?
-                return;
-            }
+            resultService.recordResultForEndpoint(
+                endpoint,
+                ZonedDateTime.now(),
+                response.getStatusCodeValue(),
+                response.getBody()
+            );
         }
     }
 
