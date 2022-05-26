@@ -22,15 +22,19 @@ public class MonitoredEndpoint {
     @Column
     private ZonedDateTime lastChecked;
 
+    @Column
+    private ZonedDateTime nextCheck;
+
     @ManyToOne
     private User owner;
 
     @Column
     private Integer interval;
 
-    public MonitoredEndpoint(User owner, String url, Integer interval) {
+    public MonitoredEndpoint(User owner, String url, ZonedDateTime nextCheck, Integer interval) {
         this.owner = owner;
         this.url = url;
+        this.nextCheck = nextCheck;
         this.interval = interval;
         this.created = ZonedDateTime.now();
         this.lastChecked = null;
@@ -68,6 +72,14 @@ public class MonitoredEndpoint {
 
     public void setLastChecked(ZonedDateTime lastChecked) {
         this.lastChecked = lastChecked;
+    }
+
+    public ZonedDateTime getNextCheck() {
+        return nextCheck;
+    }
+
+    public void setNextCheck(ZonedDateTime nextCheck) {
+        this.nextCheck = nextCheck;
     }
 
     public User getOwner() {

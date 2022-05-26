@@ -5,6 +5,7 @@ import ca.lebl.monitoring.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +17,7 @@ public interface MonitoredEndpointRepository extends JpaRepository<MonitoredEndp
     Optional<MonitoredEndpoint> findById(Long id);
 
     Optional<MonitoredEndpoint> findByIdAndOwner(Long id, User owner);
+
+    List<MonitoredEndpoint> findByNextCheckBefore(ZonedDateTime time);
 
 }
