@@ -19,7 +19,7 @@ public class MonitoringResultService {
 
     public Stream<MonitoringResult> getTenLatestResultsForEndpoint(MonitoredEndpoint endpoint) {
 
-        return resultRepository.findByEndpointOrderByDateOfCheck(endpoint).limit(10);
+        return resultRepository.findByEndpointOrderByDateOfCheckDesc(endpoint).limit(10);
 
     }
 
