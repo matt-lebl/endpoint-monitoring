@@ -1,6 +1,5 @@
 package ca.lebl.monitoring.entity;
 
-import ca.lebl.monitoring.dto.UserDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -94,11 +93,4 @@ public class User implements UserDetails {
         this.username = username;
     }
 
-    public UserDto toDto() {
-        return new UserDto(
-            id,
-            username,
-            email
-        );
-    }
 }

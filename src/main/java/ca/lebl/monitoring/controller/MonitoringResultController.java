@@ -1,5 +1,6 @@
 package ca.lebl.monitoring.controller;
 
+import ca.lebl.monitoring.dto.DtoMapper;
 import ca.lebl.monitoring.dto.MonitoringResultDto;
 import ca.lebl.monitoring.entity.MonitoredEndpoint;
 import ca.lebl.monitoring.entity.MonitoringResult;
@@ -33,7 +34,7 @@ public class MonitoringResultController {
     ) {
         MonitoredEndpoint endpoint = endpointService.getEndpointById(endpointId);
         try (Stream<MonitoringResult> resultStream = resultService.getTenLatestResultsForEndpoint(endpoint)) {
-            return resultStream.map(MonitoringResult::toDto).toList();
+            return resultStream.map(DtoMapper::toDto).toList();
         }
     }
 
