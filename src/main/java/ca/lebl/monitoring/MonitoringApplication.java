@@ -31,19 +31,19 @@ public class MonitoringApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// Seed database with some users
-		userService.createUser(
+		userService.createUserIfNotExists(
 			"Applifting",
 			"info@applifting.cz",
 			"93f39e2f-80de-4033-99ee-249d92736a25"
 		);
 
-		userService.createUser(
+		userService.createUserIfNotExists(
 			"Batman",
 			"batman@example.com",
 			"dcb20f8a-5657-4f1b-9f7f-ce65739b359e"
 		);
 
-		userService.createUser(
+		userService.createUserIfNotExists(
 			"Matt",
 			"matt.lebl@applifting.cz",
 			"hello"
