@@ -12,6 +12,7 @@ public class DtoMapper {
             entity.getId(),
             entity.getUrl(),
             entity.getLastChecked(),
+            entity.getInterval(),
             entity.getCreated()
         );
     }
