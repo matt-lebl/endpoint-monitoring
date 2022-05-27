@@ -72,6 +72,8 @@ public class MonitoredEndpointService {
                 response.getStatusCodeValue(),
                 response.getBody()
             );
+
+            rescheduleEndpointCheck(endpoint);
         }
     }
 
