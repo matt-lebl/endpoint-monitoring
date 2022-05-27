@@ -75,6 +75,10 @@ public class MonitoredEndpointService {
         }
     }
 
+    public void deleteEndpoint(MonitoredEndpoint endpoint) {
+        endpointRepository.delete(endpoint);
+    }
+
     private User getUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }

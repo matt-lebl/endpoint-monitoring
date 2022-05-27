@@ -2,9 +2,9 @@ package ca.lebl.monitoring.entity;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "monitoring_monitoredendpoint")
 public class MonitoredEndpoint {
 
     @Id
@@ -25,6 +25,9 @@ public class MonitoredEndpoint {
 
     @ManyToOne
     private User owner;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "endpoint")
+    private List<MonitoringResult> results;
 
     @Column
     private Integer interval;

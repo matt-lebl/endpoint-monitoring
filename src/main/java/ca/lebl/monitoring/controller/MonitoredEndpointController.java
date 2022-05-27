@@ -43,6 +43,14 @@ public class MonitoredEndpointController {
         return DtoMapper.toDto(endpoint);
     }
 
+    @DeleteMapping
+    public void deleteMonitoredEndpoint(
+        @RequestParam("id") Long endpointId
+    ) {
+        MonitoredEndpoint endpoint = endpointService.getEndpointById(endpointId);
+        endpointService.deleteEndpoint(endpoint);
+    }
+
     private User getUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
