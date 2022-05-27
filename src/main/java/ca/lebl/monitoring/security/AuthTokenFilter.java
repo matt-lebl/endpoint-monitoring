@@ -32,9 +32,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         HttpServletResponse response,
         FilterChain filterChain
     ) throws ServletException, IOException {
-        String token = request.getParameter("authToken");
 
-        if (token == null) {
+        String token;
+
+        try {
+            token = request.getHeader("Authorization").split(" ")[1];
+        } catch (Exception e) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
             Map<String, Object> body = new HashMap<>();

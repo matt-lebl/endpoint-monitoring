@@ -24,11 +24,11 @@ public abstract class ControllerTest {
     }
 
     MockHttpServletRequestBuilder addAuthorizedToken(MockHttpServletRequestBuilder builder) {
-        return builder.param("authToken", AUTHORIZED_ACCESS_TOKEN);
+        return builder.header("Authorization", String.format("Bearer %s", AUTHORIZED_ACCESS_TOKEN));
     }
 
     MockHttpServletRequestBuilder addUnauthorizedToken(MockHttpServletRequestBuilder builder) {
-        return builder.param("authToken", UNAUTHORIZED_ACCESS_TOKEN);
+        return builder.header("Authorization", String.format("Bearer %s", UNAUTHORIZED_ACCESS_TOKEN));
     }
 
 }
