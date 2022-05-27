@@ -4,7 +4,6 @@ import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "monitoring_monitoringresult")
 public class MonitoringResult {
 
     @Id
