@@ -1,20 +1,27 @@
 package ca.lebl.monitoring;
 
-import ca.lebl.monitoring.entity.User;
-import ca.lebl.monitoring.repository.UserRepository;
+import ca.lebl.monitoring.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.List;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @SpringBootApplication
 public class MonitoringApplication implements CommandLineRunner {
 
-	private UserRepository userRepository;
+	private UserService userService;
 
-	public MonitoringApplication(UserRepository userRepository) {
-		this.userRepository = userRepository;
+	public MonitoringApplication(UserService userService) {
+		this.userService = userService;
+	}
+
+	@Bean
+	public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
+		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+		threadPoolTaskScheduler.setPoolSize(5);
+		threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
+		return threadPoolTaskScheduler;
 	}
 
 	public static void main(String[] args) {
@@ -24,24 +31,22 @@ public class MonitoringApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// Seed database with some users
-		User applifting = new User(
+		userService.createUserIfNotExists(
 			"Applifting",
 			"info@applifting.cz",
 			"93f39e2f-80de-4033-99ee-249d92736a25"
 		);
 
-		User batman = new User(
+		userService.createUserIfNotExists(
 			"Batman",
 			"batman@example.com",
 			"dcb20f8a-5657-4f1b-9f7f-ce65739b359e"
 		);
 
-		User matt = new User(
+		userService.createUserIfNotExists(
 			"Matt",
 			"matt.lebl@applifting.cz",
 			"hello"
 		);
-
-		userRepository.saveAll(List.of(applifting, batman, matt));
 	}
 }

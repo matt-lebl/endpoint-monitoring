@@ -4,6 +4,8 @@ import ca.lebl.monitoring.entity.User;
 import ca.lebl.monitoring.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -13,7 +15,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User getUserByUsername(String username) {
+    public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -27,5 +29,9 @@ public class UserService {
         userRepository.save(newUser);
 
         return newUser;
+    }
+
+    public User createUserIfNotExists(String username, String email, String accessToken) {
+        return getUserByUsername(username).orElseGet(() -> createUser(username, email, accessToken));
     }
 }

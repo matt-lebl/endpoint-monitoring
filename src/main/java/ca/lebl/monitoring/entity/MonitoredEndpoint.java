@@ -1,13 +1,10 @@
 package ca.lebl.monitoring.entity;
 
-import ca.lebl.monitoring.dto.MonitoredEndpointDto;
-
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
+import java.util.List;
 
 @Entity
-@Table(name = "monitoring_monitoredendpoint")
 public class MonitoredEndpoint {
 
     @Id
@@ -23,15 +20,22 @@ public class MonitoredEndpoint {
     @Column
     private ZonedDateTime lastChecked;
 
+    @Column
+    private ZonedDateTime nextCheck;
+
     @ManyToOne
     private User owner;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "endpoint")
+    private List<MonitoringResult> results;
 
     @Column
     private Integer interval;
 
-    public MonitoredEndpoint(User owner, String url, Integer interval) {
+    public MonitoredEndpoint(User owner, String url, ZonedDateTime nextCheck, Integer interval) {
         this.owner = owner;
         this.url = url;
+        this.nextCheck = nextCheck;
         this.interval = interval;
         this.created = ZonedDateTime.now();
         this.lastChecked = null;
@@ -71,6 +75,14 @@ public class MonitoredEndpoint {
         this.lastChecked = lastChecked;
     }
 
+    public ZonedDateTime getNextCheck() {
+        return nextCheck;
+    }
+
+    public void setNextCheck(ZonedDateTime nextCheck) {
+        this.nextCheck = nextCheck;
+    }
+
     public User getOwner() {
         return owner;
     }
@@ -87,12 +99,4 @@ public class MonitoredEndpoint {
         this.interval = interval;
     }
 
-    public MonitoredEndpointDto toDto() {
-        return new MonitoredEndpointDto(
-            id,
-            url,
-            lastChecked,
-            created
-        );
-    }
 }

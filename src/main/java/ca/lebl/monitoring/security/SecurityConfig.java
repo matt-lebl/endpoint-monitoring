@@ -1,6 +1,7 @@
 package ca.lebl.monitoring.security;
 
 import ca.lebl.monitoring.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,9 +14,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
+    private final ObjectMapper objectMapper;
 
-    public SecurityConfig(UserService userService) {
+    public SecurityConfig(UserService userService, ObjectMapper objectMapper) {
         this.userService = userService;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -23,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests().anyRequest().authenticated();
-        http.addFilterBefore(new AuthTokenFilter(userService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new AuthTokenFilter(userService, objectMapper), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

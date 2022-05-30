@@ -7,12 +7,14 @@ public class MonitoredEndpointDto {
     private Long id;
     private String url;
     private ZonedDateTime lastChecked;
+    private Integer interval;
     private ZonedDateTime created;
 
-    public MonitoredEndpointDto(Long id, String url, ZonedDateTime lastChecked, ZonedDateTime created) {
+    public MonitoredEndpointDto(Long id, String url, ZonedDateTime lastChecked, Integer interval, ZonedDateTime created) {
         this.id = id;
         this.url = url;
         this.lastChecked = lastChecked;
+        this.interval = interval;
         this.created = created;
     }
 
@@ -38,6 +40,14 @@ public class MonitoredEndpointDto {
 
     public void setLastChecked(ZonedDateTime lastChecked) {
         this.lastChecked = lastChecked;
+    }
+
+    public Integer getInterval() {
+        return interval;
+    }
+
+    public void setInterval(Integer interval) {
+        this.interval = interval;
     }
 
     public ZonedDateTime getCreated() {
